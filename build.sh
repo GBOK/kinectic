@@ -3,7 +3,9 @@
 CORE="/Applications/Processing.app/Contents/Java/core/library/core.jar"
 BIN="bin-temp"
 
-mkdir "$BIN" \
-&& javac -classpath "$CORE" -d "$BIN" src/kinectic/*.java \
-&& jar -cf "$BIN"/*.java library/kinectic.jar \
-&& rm -rf "$BIN"
+if [[ ! -d "$BIN" ]]; then
+    mkdir "$BIN"
+fi
+javac -classpath "$CORE" -d "$BIN" src/kinectic/*.java
+jar -cf library/kinectic.jar "$BIN"
+rm -rf "$BIN"
