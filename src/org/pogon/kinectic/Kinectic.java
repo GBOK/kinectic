@@ -44,7 +44,7 @@ public class Kinectic {
         this(w, h, samplerate, 0.3f);
     }
 
-    Kinectic(int w, int h) {
+    public Kinectic(int w, int h) {
         this(w, h, 3);
     }
 

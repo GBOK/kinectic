@@ -3,7 +3,7 @@ package org.pogon.kinectic;
 import processing.core.PVector;
 import java.lang.Comparable;
 
-public class Track implements Comparable<Track> {
+class Track implements Comparable<Track> {
 
     public V tip;
     public PVector dimesions;

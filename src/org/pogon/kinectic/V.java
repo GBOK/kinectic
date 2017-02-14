@@ -2,7 +2,7 @@ package org.pogon.kinectic;
 
 import processing.core.PVector;
 
-public class V extends PVector implements Comparable<V> {
+class V extends PVector implements Comparable<V> {
 
     @Override
     public int compareTo(V d) {

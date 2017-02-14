@@ -2,7 +2,7 @@ package org.pogon.kinectic;
 
 import processing.core.PVector;
 
-public class Rot {
+class Rot {
 
     private final float q0;
     private final float q1;
