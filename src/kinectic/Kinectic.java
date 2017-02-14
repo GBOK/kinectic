@@ -1,12 +1,11 @@
+package kinectic;
+
 import processing.core.PVector;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-/**
- *
- */
-class DepthProcessor {
+public class Kinectic {
 
     private int w, h;
     private ArrayList<V> points;
@@ -21,7 +20,7 @@ class DepthProcessor {
     private PVector negative = new PVector(-10.0f, -10.0f, -10.0f);
     private PVector positive = new PVector(10.0f, 10.0f, 10.0f);
 
-    DepthProcessor(int w, int h, int samplerate, float sensitivity, float depth, PVector detectionDimensions) {
+    Kinectic(int w, int h, int samplerate, float sensitivity, float depth, PVector detectionDimensions) {
         this.w = w;
         this.h = h;
         this.points = new ArrayList<V>(this.w * this.h);
@@ -33,19 +32,19 @@ class DepthProcessor {
         this.trackers = new ArrayList<Tracker>(this.max);
     }
 
-    DepthProcessor(int w, int h, int samplerate, float sensitivity, float depth) {
+    Kinectic(int w, int h, int samplerate, float sensitivity, float depth) {
         this(w, h, samplerate, sensitivity, depth, new PVector(0.1f, 0.1f, 0.25f));
     }
 
-    DepthProcessor(int w, int h, int samplerate, float sensitivity) {
+    Kinectic(int w, int h, int samplerate, float sensitivity) {
         this(w, h, samplerate, sensitivity, 2.0f);
     }
 
-    DepthProcessor(int w, int h, int samplerate) {
+    Kinectic(int w, int h, int samplerate) {
         this(w, h, samplerate, 0.3f);
     }
 
-    DepthProcessor(int w, int h) {
+    Kinectic(int w, int h) {
         this(w, h, 3);
     }
 
