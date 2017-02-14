@@ -1,3 +1,5 @@
+package kinectic;
+
 import processing.core.PVector;
 
 class V extends PVector implements Comparable<V> {

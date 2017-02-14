@@ -1,3 +1,5 @@
+package kinectic;
+
 import processing.core.PVector;
 
 public class Rot {

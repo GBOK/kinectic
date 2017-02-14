@@ -1,3 +1,5 @@
+package kinectic;
+
 import processing.core.PVector;
 import java.lang.Comparable;
 import java.util.ArrayList;
