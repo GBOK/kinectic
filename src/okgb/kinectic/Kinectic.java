@@ -1,4 +1,4 @@
-package org.pogon.kinectic;
+package okgb.kinectic;
 
 import processing.core.PVector;
 import java.util.ArrayList;
