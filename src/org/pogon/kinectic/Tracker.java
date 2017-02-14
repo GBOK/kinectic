@@ -1,10 +1,10 @@
-package kinectic;
+package org.pogon.kinectic;
 
 import processing.core.PVector;
 import java.lang.Comparable;
 import java.util.ArrayList;
 
-class Tracker implements Comparable<Tracker> {
+public class Tracker implements Comparable<Tracker> {
 
     public ArrayList<PVector> history;
     private float distance;

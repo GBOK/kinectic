@@ -1,4 +1,4 @@
-package kinectic;
+package org.pogon.kinectic;
 
 import processing.core.PVector;
 

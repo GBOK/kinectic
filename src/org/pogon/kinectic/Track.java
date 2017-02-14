@@ -1,9 +1,9 @@
-package kinectic;
+package org.pogon.kinectic;
 
 import processing.core.PVector;
 import java.lang.Comparable;
 
-class Track implements Comparable<Track> {
+public class Track implements Comparable<Track> {
 
     public V tip;
     public PVector dimesions;
