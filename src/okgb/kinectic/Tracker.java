@@ -10,25 +10,22 @@ public class Tracker implements Comparable<Tracker> {
     private float distance;
     private int threshold;
     private int tick = 0;
-    public int c = 0xff0000ff;
+    private int color;
 
-    Tracker(V initial, float distance, int threshold) {
+    Tracker(Track initial, float distance, int threshold) {
+        this.color =
+            0xFF000000
+            + (int)(Math.random() * 0x100) * 0x10000
+            + (int)(Math.random() * 0x100) * 0x100
+            + (int)(Math.random() * 0x100);
         this.history = new ArrayList<PVector>(100);
         this.claim(initial);
         this.distance = distance;
         this.threshold = threshold;
     }
 
-    Tracker(V initial, float distance) {
+    Tracker(Track initial, float distance) {
         this(initial, distance, 2);
-    }
-
-    Tracker(V initial) {
-        this(initial, 0.3f);
-    }
-
-    Tracker() {
-        this(null);
     }
 
     public boolean prune() {
@@ -48,16 +45,23 @@ public class Tracker implements Comparable<Tracker> {
             : null;
     }
 
-    public boolean claim(V point) {
+    public boolean claim(Track track) {
         PVector last = ! this.history.isEmpty()
             ? this.history.get(this.history.size() - 1)
             : null;
 
-        if (last == null || last.dist(point) < this.distance){
-            this.history.add((PVector)point);
+        KVector tip = track.getTip();
+        if (last == null || last.dist(tip) < this.distance) {
+            //if (last != null) System.out.println(last.dist(tip) + " " + this.distance);
+            this.history.add((PVector)tip);
+            track.setTracker(this);
             return true;
         }
         return false;
+    }
+
+    public int getColor() {
+        return this.color;
     }
 
     @Override

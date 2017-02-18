@@ -3,16 +3,16 @@ package okgb.kinectic;
 import processing.core.PVector;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
+import java.util.ListIterator;
 
 public class Kinectic {
 
     private int w, h;
-    private ArrayList<V> points;
+    private ArrayList<KVector> points;
     private float[] lookup;
     private int samplerate;
     private float sensitivity;
-    private int max = 1000; // maximum number of trackers (speed up memory allocation);
+    private int maxTracks = 1000; // maximum number of trackers (speed up memory allocation);
     private ArrayList<Tracker> trackers;
     private float depth;
     private PVector detectionDimensions;
@@ -23,13 +23,13 @@ public class Kinectic {
     Kinectic(int w, int h, int samplerate, float sensitivity, float depth, PVector detectionDimensions) {
         this.w = w;
         this.h = h;
-        this.points = new ArrayList<V>(this.w * this.h);
+        this.points = new ArrayList<KVector>(this.w * this.h);
         this.generateLookupTable();
         this.samplerate = samplerate;
         this.sensitivity = sensitivity;
         this.depth = depth;
         this.detectionDimensions = detectionDimensions;
-        this.trackers = new ArrayList<Tracker>(this.max);
+        this.trackers = new ArrayList<Tracker>(this.maxTracks);
     }
 
     Kinectic(int w, int h, int samplerate, float sensitivity, float depth) {
@@ -41,7 +41,7 @@ public class Kinectic {
     }
 
     Kinectic(int w, int h, int samplerate) {
-        this(w, h, samplerate, 0.3f);
+        this(w, h, samplerate, 0.2f);
     }
 
     public Kinectic(int w, int h) {
@@ -164,7 +164,7 @@ public class Kinectic {
                     d += rawData[x + y * this.w];
                 }
                 d /= size;
-                V v = this.depthToWorld(x, y, (int)d);
+                KVector v = this.depthToWorld(x, y, (int)d);
                 if (v == null) continue;
                 v.z -= this.depth;
                 rotY.applyTo((PVector)v);
@@ -183,42 +183,28 @@ public class Kinectic {
 
     public ArrayList<Tracker> detect() {
         Collections.sort(this.points); // sort by depth
-        ArrayList<Track> tracks = new ArrayList<Track>(this.max);
-        for (V v : this.points) {
-            boolean skip = false;
-            outer:
-            for(Track t : tracks) {
-                switch (t.relation(v)) {
-                    case 1:
-                        skip = true;
-                        break;
-                    case 2:
-                        t.invalidate();
-                        skip = true;
-                        break;
-                    default:
-                        // don't care. skip
-                }
+        ArrayList<Track> tracks = new ArrayList<Track>(this.maxTracks);
+
+        for (KVector v : this.points) {
+            for(Track track: tracks) {
+                if (track.claim(v)) break;
             }
-            if (!skip && tracks.size() < this.max) {
+            if (v.track == null) {
                 tracks.add(new Track(v, this.detectionDimensions));
             }
         }
         for (Track track : tracks) {
             if (track.isValid()) {
                 for (Tracker tracker : this.trackers) {
-                    if (tracker.claim(track.tip)) {
-                        track = null;
-                        break;
-                    }
+                    if (tracker.claim(track)) break;
                 }
-                if (track != null) {
-                    this.trackers.add(new Tracker(track.tip, this.sensitivity));
+                if (track.tracker == null) {
+                    this.trackers.add(new Tracker(track, this.sensitivity));
                 }
             }
         }
         ArrayList<Tracker> output = new ArrayList<Tracker>(this.trackers.size());
-        Iterator<Tracker> itr = this.trackers.iterator();
+        ListIterator<Tracker> itr = this.trackers.listIterator();
         while (itr.hasNext()) {
             Tracker tr = itr.next();
             if (tr.prune()) {
@@ -229,11 +215,11 @@ public class Kinectic {
                 }
             }
         }
-        return this.trackers;
+        return output;
     }
 
-    public ArrayList<PVector> getPoints() {
-        return new ArrayList<PVector>(this.points);
+    public ArrayList<KVector> getPoints() {
+        return this.points;
     }
 
     private void generateLookupTable() {
@@ -252,14 +238,14 @@ public class Kinectic {
         return out;
     }
 
-    private V depthToWorld(int x, int y, int depthValue) {
+    private KVector depthToWorld(int x, int y, int depthValue) {
         double depth = this.lookup[depthValue];
         if (depth < 0.0f) return null;
         final double fx_d = 1.0 / 5.9421434211923247e+02;
         final double fy_d = 1.0 / 5.9104053696870778e+02;
         final double cx_d = 3.3930780975300314e+02;
         final double cy_d = 2.4273913761751615e+02;
-        V result = new V();
+        KVector result = new KVector();
         result.x = (float)((x - cx_d) * depth * fx_d);
         result.y = (float)((y - cy_d) * depth * fy_d);
         result.z = (float)(depth);
