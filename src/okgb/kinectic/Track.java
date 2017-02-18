@@ -2,50 +2,49 @@ package okgb.kinectic;
 
 import processing.core.PVector;
 import java.lang.Comparable;
+import java.util.ArrayList;
+import java.util.ListIterator;
 
 class Track implements Comparable<Track> {
 
-    public V tip;
+    public ArrayList<KVector> points;
     public PVector dimesions;
-    private boolean valid = true;
+    public float leftBound = 0.0f, rightBound = 0.0f, topBound = 0.0f, bottomBound = 0.0f;
+    private float distance;
     public int weight = 0;
+    public Tracker tracker;
+    private boolean valid = true;
 
-    Track(V tip, PVector dimesions){
-        this.tip = tip;
+    Track(KVector tip, PVector dimesions){
+        this.points = new ArrayList<KVector>(640 * 480);
         this.dimesions = dimesions;
+        this.distance = 0.1f;
+        this.points.add(tip);
     }
 
-    public int relation(V v) {
+    public boolean claim(KVector v) {
 
-        float dx = Math.abs(v.x - this.tip.x);
-        float dy = Math.abs(v.y - this.tip.y);
-        float dz = Math.abs(v.z - this.tip.z);
-
-        boolean insidex = dx - dz * 0.5f <= this.dimesions.x;
-        boolean insidey = dy - dz * 0.5f <= this.dimesions.y;
-
-        ++ this.weight;
-        if (insidex && insidey) return 1;
-
-        if (dz <= this.dimesions.z) {
-            float ox = this.dimesions.x + this.dimesions.z * 0.5f;
-            float oy = this.dimesions.y + this.dimesions.z * 0.5f;
-            if (dx <= ox && dy <= oy) return 2;
-        }
-
-        return 0;
+        return false;
     }
 
-    public boolean close(V v) {
-        return this.tip.dist(v) < this.tip.z;
+    public boolean close(KVector v) {
+        return true; //this.tip.dist(v) < this.tip.z;
     }
 
     public void invalidate() {
         this.valid = false;
     }
 
+    public KVector getTip() {
+        return this.points.get(0);
+    }
+
     public boolean isValid() {
         return this.valid && this.weight > 10;
+    }
+
+    public void setTracker(Tracker tracker) {
+        this.tracker = tracker;
     }
 
     @Override
