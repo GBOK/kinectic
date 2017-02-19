@@ -9,22 +9,30 @@ class Track implements Comparable<Track> {
 
     public ArrayList<KVector> points;
     public PVector dimesions;
-    public float leftBound = 0.0f, rightBound = 0.0f, topBound = 0.0f, bottomBound = 0.0f;
     private float distance;
     public int weight = 0;
     public Tracker tracker;
     private boolean valid = true;
+    private Hull hull;
 
     Track(KVector tip, PVector dimesions){
         this.points = new ArrayList<KVector>(640 * 480);
         this.dimesions = dimesions;
         this.distance = 0.1f;
         this.points.add(tip);
+        this.hull = new Hull();
+        this.hull.add(tip);
     }
 
     public boolean claim(KVector v) {
+        ++this.weight;
+        this.points.add(v);
+        return true;
 
-        return false;
+
+        // if (!this.hull.claim(v)) return false;
+        // this.points.add(v);
+        // return true;
     }
 
     public boolean close(KVector v) {
