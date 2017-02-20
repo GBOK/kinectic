@@ -46,7 +46,9 @@ public class Hull extends ArrayList<KVector> implements PConstants {
             float x = p.x - current.x;
             float y = p.y - current.y;
             float a = (float)Math.atan2(y, x);
-            if (a < current.angle) a += TWO_PI;
+            if (a < current.angle) {
+                a += TWO_PI;
+            }
             if (a < angle) {
                 mostCCV = p;
                 angle = a;
@@ -72,5 +74,4 @@ public class Hull extends ArrayList<KVector> implements PConstants {
         c.add(d);
         return ((b.x - a.x)*(c.y - a.y) - (b.y - a.y)*(c.x - a.x)) >= 0;
     }
-
 }

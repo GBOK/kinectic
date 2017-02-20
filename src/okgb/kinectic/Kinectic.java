@@ -45,7 +45,7 @@ public class Kinectic {
     }
 
     public Kinectic(int w, int h) {
-        this(w, h, 3);
+        this(w, h, 6);
     }
 
     public void setBox(float nx, float ny, float nz, float px, float py, float pz) {
