@@ -5,7 +5,7 @@ import processing.core.PConstants;
 
 public class Hull extends ArrayList<KVector> implements PConstants {
 
-    float tolerance = 10.0f;
+    float tolerance = 0.2f;
 
     public void setTolerance(float tolerance) {
         this.tolerance = tolerance;
@@ -21,7 +21,11 @@ public class Hull extends ArrayList<KVector> implements PConstants {
     private void recalculate() {
         KVector leftmost = null;
         for (KVector p : this) {
-            if (leftmost == null || p.x < leftmost.x) {
+            if (
+                leftmost == null
+                || p.x < leftmost.x
+                || p.x == leftmost.x && p.y < leftmost.y
+            ) {
                 leftmost = p;
             }
         }
@@ -49,7 +53,11 @@ public class Hull extends ArrayList<KVector> implements PConstants {
             if (a < current.angle) {
                 a += TWO_PI;
             }
-            if (a < angle) {
+            if (
+                mostCCV == null
+                || a < angle
+                || a == angle && current.dist(p) > current.dist(mostCCV)
+            ) {
                 mostCCV = p;
                 angle = a;
             }
@@ -68,10 +76,11 @@ public class Hull extends ArrayList<KVector> implements PConstants {
     }
 
     private boolean isRightOf(KVector a, KVector b, KVector c) {
+        KVector cCopy = new KVector(c.x, c.y, c.z);
         KVector d = new KVector(b.x - a.x, b.y - a.y);
         d.rotate(HALF_PI);
         d.setMag(this.tolerance);
-        c.add(d);
-        return ((b.x - a.x)*(c.y - a.y) - (b.y - a.y)*(c.x - a.x)) >= 0;
+        cCopy.add(d);
+        return ((b.x - a.x)*(cCopy.y - a.y) - (b.y - a.y)*(cCopy.x - a.x)) >= 0;
     }
 }

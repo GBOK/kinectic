@@ -20,7 +20,7 @@ public class Kinectic {
     private PVector negative = new PVector(-10.0f, -10.0f, -10.0f);
     private PVector positive = new PVector(10.0f, 10.0f, 10.0f);
 
-    Kinectic(int w, int h, int samplerate, float sensitivity, float depth, PVector detectionDimensions) {
+    public Kinectic(int w, int h, int samplerate, float sensitivity, float depth, PVector detectionDimensions) {
         this.w = w;
         this.h = h;
         this.points = new ArrayList<KVector>(this.w * this.h);
@@ -32,20 +32,20 @@ public class Kinectic {
         this.trackers = new ArrayList<Tracker>(this.maxTracks);
     }
 
-    Kinectic(int w, int h, int samplerate, float sensitivity, float depth) {
+    public Kinectic(int w, int h, int samplerate, float sensitivity, float depth) {
         this(w, h, samplerate, sensitivity, depth, new PVector(0.1f, 0.1f, 0.25f));
     }
 
-    Kinectic(int w, int h, int samplerate, float sensitivity) {
+    public Kinectic(int w, int h, int samplerate, float sensitivity) {
         this(w, h, samplerate, sensitivity, 2.0f);
     }
 
-    Kinectic(int w, int h, int samplerate) {
+    public Kinectic(int w, int h, int samplerate) {
         this(w, h, samplerate, 0.2f);
     }
 
     public Kinectic(int w, int h) {
-        this(w, h, 6);
+        this(w, h, 1);
     }
 
     public void setBox(float nx, float ny, float nz, float px, float py, float pz) {
