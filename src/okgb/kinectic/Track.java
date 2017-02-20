@@ -20,8 +20,8 @@ class Track implements Comparable<Track> {
         this.dimesions = dimesions;
         this.distance = 0.1f;
         this.points.add(tip);
-        //this.hull = new Hull();
-        //this.hull.add(tip);
+        this.hull = new Hull();
+        this.hull.add(tip);
     }
 
     public boolean claim(KVector v) {
